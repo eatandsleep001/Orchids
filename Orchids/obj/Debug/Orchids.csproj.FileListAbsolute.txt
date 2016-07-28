@@ -1,5 +1,0 @@
-E:\0\C#\Orchids\Orchids\bin\Debug\Orchids.exe.config
-E:\0\C#\Orchids\Orchids\bin\Debug\Orchids.exe
-E:\0\C#\Orchids\Orchids\bin\Debug\Orchids.pdb
-E:\0\C#\Orchids\Orchids\obj\Debug\Orchids.exe
-E:\0\C#\Orchids\Orchids\obj\Debug\Orchids.pdb
