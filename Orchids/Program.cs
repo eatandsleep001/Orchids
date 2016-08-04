@@ -33,7 +33,7 @@ namespace OrchidsNamespace      //Lan
             while (!int.TryParse(Console.ReadLine(), out timeout));
 
             orchids = new Orchids(url, totalView, timeout);
-            orchids.Do();
+            orchids.Run();
         }
     }
 }

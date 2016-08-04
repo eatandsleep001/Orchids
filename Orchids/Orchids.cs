@@ -48,6 +48,7 @@ namespace OrchidsNamespace
                 httpWebRequest.Accept = @"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
                 httpWebRequest.Headers.Add(@"Accept-Language", @"vi-VN,vi;q=0.8,fr-FR;q=0.6,fr;q=0.4,en-US;q=0.2,en;q=0.2");
                 httpWebRequest.UserAgent = @"vi-VN,vi;q=0.8,fr-FR;q=0.6,fr;q=0.4,en-US;q=0.2,en;q=0.2";
+                httpWebRequest.Timeout = timeout;
 
                 using ((HttpWebResponse)httpWebRequest.GetResponse()) { }
 
@@ -58,7 +59,7 @@ namespace OrchidsNamespace
             return false;
         }
 
-        public void Do()
+        private void Do(int threadID)
         {
             string shortUrl = null;
 
@@ -72,14 +73,32 @@ namespace OrchidsNamespace
                 this.Get();
 
                 this.mutex.WaitOne();
+
                 this.countView++;
 
                 if (this.countView > this.totalView)
                     break;
 
-                Console.WriteLine(shortUrl + "\t" + this.countView);
+                Console.WriteLine(@"Thread " + threadID + @" : " + shortUrl + "\t" + this.countView);
 
                 this.mutex.ReleaseMutex();
+            }
+        }
+
+        public void Run()
+        {
+            List<Thread> threads = new List<Thread>();
+            int threadCount = 1;
+
+            int.TryParse(Orchids.ReadAllTextInFile(@"thread.txt"), out threadCount);
+
+            if (threadCount > this.totalView)
+                threadCount = this.totalView;
+
+            for (int i = 0; i < threadCount; i++)
+            {
+                threads.Add(new Thread(delegate () { this.Do(i); }));
+                threads[i].Start();
             }
         }
     }
