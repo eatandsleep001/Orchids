@@ -47,8 +47,8 @@ namespace OrchidsNamespace
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(this.uri);
                 httpWebRequest.Accept = @"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
                 httpWebRequest.Headers.Add(@"Accept-Language", @"vi-VN,vi;q=0.8,fr-FR;q=0.6,fr;q=0.4,en-US;q=0.2,en;q=0.2");
-                httpWebRequest.UserAgent = @"vi-VN,vi;q=0.8,fr-FR;q=0.6,fr;q=0.4,en-US;q=0.2,en;q=0.2";
-                httpWebRequest.Timeout = timeout;
+                httpWebRequest.UserAgent = @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.82 Safari/537.36";
+                httpWebRequest.Timeout = this.timeout;
 
                 using ((HttpWebResponse)httpWebRequest.GetResponse()) { }
 
@@ -79,7 +79,7 @@ namespace OrchidsNamespace
                 if (this.countView > this.totalView)
                     break;
 
-                Console.WriteLine(@"Thread " + threadID + @" : " + shortUrl + "\t" + this.countView);
+                Console.WriteLine(@"Thread " + threadID + @" : " + shortUrl + "\t\t" + this.countView);
 
                 this.mutex.ReleaseMutex();
             }
