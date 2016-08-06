@@ -76,8 +76,11 @@ namespace OrchidsNamespace
 
                 this.countView++;
 
-                if (this.countView > this.totalView)
+                if (this.countView >= this.totalView)
+                {
+                    this.mutex.ReleaseMutex();
                     break;
+                }
 
                 Console.WriteLine(@"Thread " + threadID + @" : " + shortUrl + "\t\t" + this.countView);
 
