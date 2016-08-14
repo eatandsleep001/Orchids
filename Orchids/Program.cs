@@ -10,6 +10,8 @@ namespace OrchidsNamespace
     {
         static void Main(string[] args)
         {
+            Console.Title = @"Orchids";
+
             if (args.Length == 0)
                 DoWithoutArgs();
         }

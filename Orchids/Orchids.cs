@@ -72,13 +72,7 @@ namespace OrchidsNamespace
 
         private void Do(int threadID)
         {
-            string shortUrl = null;
             HttpStatusCode httpStatusCode;
-
-            if (this.uri.AbsoluteUri.Length > 33)
-                shortUrl = this.uri.AbsoluteUri.Substring(0, 15) +
-                    @"..." +
-                    this.uri.AbsoluteUri.Substring(this.uri.AbsoluteUri.Length - 15, 15);
 
             while (true)
             {
@@ -93,8 +87,8 @@ namespace OrchidsNamespace
                     this.success++;
                 }
 
-                Console.WriteLine("Thread {0,3}:{1,30}\t{2,5}|{3,0}|{4,0}",
-                    threadID, shortUrl, this.success, this.countView, httpStatusCode);
+                Console.WriteLine("Thread {0,3}:\t{1,5}|{2,0}|{3,0}",
+                    threadID, this.success, this.countView, httpStatusCode);
 
                 if (this.countView >= this.totalView)
                 {
@@ -116,6 +110,8 @@ namespace OrchidsNamespace
 
             if (threadCount > this.totalView)
                 threadCount = this.totalView;
+
+            Console.Title += @" " + this.uri.AbsoluteUri;
 
             for (int i = 0; i < threadCount; i++)
             {
