@@ -40,28 +40,38 @@ namespace OrchidsNamespace
             this.mutex = new Mutex();
         }
 
-        private bool Get()
+        private HttpStatusCode Get()
         {
+            HttpStatusCode result = HttpStatusCode.BadRequest;
+
             try
             {
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(this.uri);
+                HttpWebResponse httpWebResponse = null;
+
                 httpWebRequest.Accept = @"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
                 httpWebRequest.Headers.Add(@"Accept-Language", @"vi-VN,vi;q=0.8,fr-FR;q=0.6,fr;q=0.4,en-US;q=0.2,en;q=0.2");
                 httpWebRequest.UserAgent = @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.82 Safari/537.36";
                 httpWebRequest.Timeout = this.timeout;
 
-                using ((HttpWebResponse)httpWebRequest.GetResponse()) { }
+                httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
 
-                return true;
+                if (httpWebResponse != null)
+                {
+                    result = httpWebResponse.StatusCode;
+
+                    httpWebResponse.Close();
+                }
             }
-            catch (Exception ex) { Console.WriteLine(ex.Message); }
+            catch (Exception ex) { }
 
-            return false;
+            return result;
         }
 
         private void Do(int threadID)
         {
             string shortUrl = null;
+            HttpStatusCode httpStatusCode;
 
             if (this.uri.AbsoluteUri.Length > 33)
                 shortUrl = this.uri.AbsoluteUri.Substring(0, 15) +
@@ -70,19 +80,20 @@ namespace OrchidsNamespace
 
             while (true)
             {
-                this.Get();
+                httpStatusCode = this.Get();
 
                 this.mutex.WaitOne();
 
                 this.countView++;
+
+                Console.WriteLine("Thread {0,3}:{1,30}\t{2,5}:{3,5}",
+                    threadID, shortUrl, this.countView, httpStatusCode);
 
                 if (this.countView >= this.totalView)
                 {
                     this.mutex.ReleaseMutex();
                     break;
                 }
-
-                Console.WriteLine(@"Thread " + threadID + @" : " + shortUrl + "\t\t" + this.countView);
 
                 this.mutex.ReleaseMutex();
             }
@@ -92,8 +103,9 @@ namespace OrchidsNamespace
         {
             List<Thread> threads = new List<Thread>();
             int threadCount = 1;
+            IniFile iniFile = new IniFile(@"Settings.ini");
 
-            int.TryParse(Orchids.ReadAllTextInFile(@"thread.txt"), out threadCount);
+            int.TryParse(iniFile.Read(@"Threads", @"Settings"), out threadCount);
 
             if (threadCount > this.totalView)
                 threadCount = this.totalView;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OrchidsNamespace      //Lan
+namespace OrchidsNamespace
 {
     class Program
     {
