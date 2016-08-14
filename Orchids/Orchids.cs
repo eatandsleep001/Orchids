@@ -93,7 +93,7 @@ namespace OrchidsNamespace
                     this.success++;
                 }
 
-                Console.WriteLine("Thread {0,3}:\t{1,30}|\t{2,5}|{3,5}|\t{4,5}",
+                Console.WriteLine("Thread {0,3}:{1,30}\t{2,5}|{3,0}|{4,0}",
                     threadID, shortUrl, this.success, this.countView, httpStatusCode);
 
                 if (this.countView >= this.totalView)
