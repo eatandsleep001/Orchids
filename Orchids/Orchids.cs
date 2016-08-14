@@ -13,6 +13,7 @@ namespace OrchidsNamespace
     {
         private Uri uri = null;
         private int totalView = 0;
+        private int viewSuccess = 0;
         private int countView = 0;
         private int timeout = 10000;
         private Mutex mutex = null;
@@ -34,6 +35,7 @@ namespace OrchidsNamespace
                 Console.WriteLine("Cannot create Uri");
 
             this.totalView = Math.Abs(TotalView);
+            this.viewSuccess = 0;
             this.countView = 0;
             this.timeout = Math.Abs(Timeout); ;
 
@@ -86,8 +88,13 @@ namespace OrchidsNamespace
 
                 this.countView++;
 
-                Console.WriteLine("Thread {0,3}:{1,30}\t{2,5}:{3,5}",
-                    threadID, shortUrl, this.countView, httpStatusCode);
+                if (httpStatusCode == HttpStatusCode.OK)
+                {
+                    this.viewSuccess++;
+                }
+
+                Console.WriteLine("Thread {0,3}:\t{1,30}|\t{2,5}|{3,5}|\t{4,5}",
+                    threadID, shortUrl, this.viewSuccess, this.countView, httpStatusCode);
 
                 if (this.countView >= this.totalView)
                 {
